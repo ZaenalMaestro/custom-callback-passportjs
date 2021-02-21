@@ -19,7 +19,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login')
 })
 
@@ -30,9 +30,26 @@ app.post('/login', passport.authenticate('local',{
 }))
 
 
-app.get('/', (req, res) => {
-  res.render('index')
+app.get('/', checkAuthenticated, (req, res) => {
+  res.render('index', {
+    user: req.user
+  })
 })
+
+app.get('/logout', checkAuthenticated, (req, res) => {
+  req.logOut()
+  res.redirect('/login')
+})
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return next()
+  res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return res.redirect('/')
+  next()
+}
 
 app.listen(3000, () => console.log('server running on port: 3000'))
 
