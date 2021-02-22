@@ -6,14 +6,16 @@
 </head>
 
 <body>
-<% if(messages.error) {%>
-<%= messages.error %>
-<%}%>
+  <% if(messages.error) {%>
+  <%= messages.error %>
+  <%}%>
+
 <h1>Form Login</h1>
 <form action="/login" method="post">
-  <input type="text" name="username" placeholder="Input username..."><br>
-  <input type="password" name="password" placeholder="Input password..."><br>
+  <input type="text" name="username" placeholder="Input username..." value="<%= messages.username%>"><br>
+  <input type="password" name="password" placeholder="Input password..." value="<%= messages.password%>"><br>
   <button type="submit">Login</button>
-</form>
+  </form>
 </body>
+
 </html>

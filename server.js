@@ -13,8 +13,8 @@ app.use(express.urlencoded({extended: false}))
 app.use(flash())
 app.use(session({
   secret: 'top-secret',
-  saveUninitialized: false,
-  resave: false
+  saveUninitialized: true,
+  resave: true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -23,16 +23,26 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login')
 })
 
-app.post('/login', passport.authenticate('local',{
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}))
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) {
+      req.flash('error', 'username atau password salah')
+      req.flash('username', req.body.username)
+      req.flash('password', req.body.password)
+      return res.redirect('/login')
+    }
 
+    req.logIn(user, (err) => {
+      if (err) return next(err)
+      return res.redirect('/')
+    })
+  })(req, res, next)
+})
 
 app.get('/', checkAuthenticated, (req, res) => {
   res.render('index', {
-    user: req.user
+    name: req.user.name
   })
 })
 
