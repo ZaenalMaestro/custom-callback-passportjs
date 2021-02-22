@@ -31,7 +31,9 @@ app.post('/login', passport.authenticate('local',{
 
 
 app.get('/', (req, res) => {
-  res.render('index')
+  res.render('index', {
+    name: req.user.name
+  })
 })
 
 app.listen(3000, () => console.log('server running on port: 3000'))

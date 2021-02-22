@@ -1,13 +1,13 @@
 const users = [
   {
     id: '1',
-    nama: 'User One',
+    name: 'User One',
     username: 'user_1',
     password: '1234'
   },
   {
     id: '2',
-    nama: 'User Two',
+    name: 'User Two',
     username: 'user_2',
     password: '4321'
   }
